@@ -31,13 +31,14 @@ var passConf = {
 
 // password length
 var passwordLength = function() {
-  while (!pwLength ) {
-    var pwLength = window.prompt("Please enter the number of characters of your password. Between 8 and 128 characters."); 
+  var pwLength = '';
+  while (pwLength > 128 || pwLength < 8 || isNaN(pwLength) ) {
+    pwLength = window.prompt("Please enter the number of characters of your password. Between 8 and 128 characters."); 
     pwLength = parseInt(pwLength);
-    console.log(pwLength);
-    if (pwLength > 128 || pwLength < 8 || pwLength === NaN) {
+    if (pwLength < 128 || pwLength > 8) {            
+      break;
+    }else{
       window.alert("Must be a number between 8 ane 128");
-      passwordLength();
     }
   }
   passConf.length = pwLength;
@@ -46,14 +47,16 @@ var passwordLength = function() {
 // password case type
 var caseType = function() {
  
-  while (!pwCase) {
+  while (pwCase > 3 || pwCase < 1 || isNaN(pwCase)) {
     var pwCase = window.prompt("Please select: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
     pwCase = parseInt(pwCase);
-    if (pwCase > 3 || pwCase < 1 || pwCase === NaN) {
+    if (pwCase < 3 || pwCase > 1) {            
+      break;
+    }else{
       window.alert("Must be a number between 1 and 3 (1 = Lowercase, 2 = Uppercase, 3 = Both).");
-      caseType();
     }
   }
+
   switch(pwCase) {
     case 1:
       passConf.lowercase = true;
@@ -68,14 +71,16 @@ var caseType = function() {
 // password special characters
 var spclChar = function() {
  
-  while (!pwSpecial) {
+  while (pwSpecial > 3 || pwSpecial < 1 || isNaN(pwSpecial)) {
     var pwSpecial = window.prompt("Do you want special characters in your password? Please select: 1 = Yes, 2 = No, 3 = Random selection."); 
     pwSpecial = parseInt(pwSpecial);
-    if (pwSpecial > 3 || pwSpecial < 1 || pwSpecial === NaN) {
-      window.alert("Must be a number between 1 and 3 (1 = Yes, 2 = No, 3 = Random selection).");
-      spclChar();
+    if (pwSpecial < 3 || pwSpecial > 1) {            
+      break;
+    }else{
+      window.alert("Must be a number between 1 and 3 (1 = Lowercase, 2 = Uppercase, 3 = Both).");
     }
   }
+
   switch(parseInt(pwSpecial)) {
     case 1:
       passConf.specialChar = 1;
@@ -88,6 +93,7 @@ var spclChar = function() {
 
 // Create tha character base soap 
 var stringBase = function(pConfig) {
+  debugger;
   var base = "";
   if (pConfig.lowercase) {
     base =+ charBase.lowercase;
@@ -105,9 +111,9 @@ var stringBase = function(pConfig) {
 
 }
 
-var passwordCreator = function(pconf) {
+var passwordCreator = function(pConfig) {
   var rString = ''; 
-  for (var i = 0; i < pconf.length; i++) {  
+  for (var i = 0; i < pConfig.length; i++) {  
     var randomRes = Math.floor(Math.random() * charBase.lowercase.length);  
     rString += charBase.lowercase.substring(randomRes, randomRes + 1);  
   }  
@@ -119,7 +125,10 @@ var generatePassword = function() {
   passwordLength();
   caseType();
   spclChar();
+  var sbase = stringBase(passConf)
+
   console.log(passConf);
+  console.log(sbase);
 
   return passwordCreator(passConf);
 }
