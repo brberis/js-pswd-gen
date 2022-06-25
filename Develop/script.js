@@ -31,15 +31,16 @@ var passConf = {
 
 // password length
 var passwordLength = function() {
-  while (!pwLength) {
-    var pwLength = window.prompt("Please enter the number of characters you want for your password. Between 8 and 128 characters."); 
-    if (parseInt(pwLength) > 128 || parseInt(pwLength) < 8 || !parseInt(pwLength)) {
+  while (!pwLength ) {
+    var pwLength = window.prompt("Please enter the number of characters of your password. Between 8 and 128 characters."); 
+    pwLength = parseInt(pwLength);
+    console.log(pwLength);
+    if (pwLength > 128 || pwLength < 8 || pwLength === NaN) {
       window.alert("Must be a number between 8 ane 128");
       passwordLength();
     }
   }
   passConf.length = pwLength;
-  return true;
 }
 
 // password case type
@@ -47,20 +48,61 @@ var caseType = function() {
  
   while (!pwCase) {
     var pwCase = window.prompt("Please select: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
-    if (parseInt(pwCase) > 3 || parseInt(pwLength) < 1 || !parseInt(pwCase)) {
+    pwCase = parseInt(pwCase);
+    if (pwCase > 3 || pwCase < 1 || pwCase === NaN) {
       window.alert("Must be a number between 1 and 3 (1 = Lowercase, 2 = Uppercase, 3 = Both).");
       caseType();
     }
   }
   switch(pwCase) {
-    case pwCase = 1:
+    case 1:
       passConf.lowercase = true;
-    case pwCase = 2:
+    case 2:
       passConf.uppercase = true;
-    case pwCase = 3:
+    case 3:
       passConf.lowercase = true;
       passConf.uppercase = true;
   }
+}
+
+// password special characters
+var spclChar = function() {
+ 
+  while (!pwSpecial) {
+    var pwSpecial = window.prompt("Do you want special characters in your password? Please select: 1 = Yes, 2 = No, 3 = Random selection."); 
+    pwSpecial = parseInt(pwSpecial);
+    if (pwSpecial > 3 || pwSpecial < 1 || pwSpecial === NaN) {
+      window.alert("Must be a number between 1 and 3 (1 = Yes, 2 = No, 3 = Random selection).");
+      spclChar();
+    }
+  }
+  switch(parseInt(pwSpecial)) {
+    case 1:
+      passConf.specialChar = 1;
+    case 2:
+      passConf.specialChar = 0;
+    case 3:
+      passConf.specialChar = 2;
+  }
+}
+
+// Create tha character base soap 
+var stringBase = function(pConfig) {
+  var base = "";
+  if (pConfig.lowercase) {
+    base =+ charBase.lowercase;
+
+  } else if (pConfig.uppercase) {
+    base =+ charBase.uppercase;
+
+  } else if (pConfig.numeric) {
+    base =+ charBase.numeric;
+
+  } else if (pConfig.specialChar > 0) {
+    base =+ charBase.special;
+  }
+  console.log('base: ' + base);
+
 }
 
 var passwordCreator = function(pconf) {
@@ -72,9 +114,13 @@ var passwordCreator = function(pconf) {
   return rString;
 }
 
-var generatePassword = function(length, ) {
+var generatePassword = function() {
   console.log("start");
   passwordLength();
+  caseType();
+  spclChar();
+  console.log(passConf);
+
   return passwordCreator(passConf);
 }
 
