@@ -17,13 +17,13 @@ var passConf = {
   lowercase: false, 
   uppercase: false, 
   numeric: false, 
-  specialChar: 1,
+  specialChar: 0, // 0 = no, 1 = yes, 2 = random selection
   reset: function() {
     this.length = null;
     this.lowercase = false;
     this.uppercase = false;
     this.numeric = false;
-    this.specialChar = 1;
+    this.specialChar = 0; 
   }
 }
 
@@ -43,30 +43,24 @@ var passwordLength = function() {
 }
 
 // password case type
-// var caseType = function() {
+var caseType = function() {
  
-//   while (!pwCase) {
-//     var pwCase = window.prompt("Please select: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
-//     if (parseInt(pwCase) > 3 || parseInt(pwLength) < 1 || !parseInt(pwCase)) {
-//       window.alert("Must be a number between 1 and 3 (1 = Lowercase, 2 = Uppercase, 3 = Both).");
-//       caseType();
-//     }
-//   }
-//   switch(pwCase) {
-//     case pwCase = 1:
-//       passConf.lowercase = true;
-//     case pwCase = 2:
-//       passConf.uppercase = true;
-//     case pwCase = 3:
-//       passConf.lowercase = true;
-//       passConf.uppercase = true;
-//   }
-// }
-
-
-// character types
-var characterTypes = function() {
-
+  while (!pwCase) {
+    var pwCase = window.prompt("Please select: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
+    if (parseInt(pwCase) > 3 || parseInt(pwLength) < 1 || !parseInt(pwCase)) {
+      window.alert("Must be a number between 1 and 3 (1 = Lowercase, 2 = Uppercase, 3 = Both).");
+      caseType();
+    }
+  }
+  switch(pwCase) {
+    case pwCase = 1:
+      passConf.lowercase = true;
+    case pwCase = 2:
+      passConf.uppercase = true;
+    case pwCase = 3:
+      passConf.lowercase = true;
+      passConf.uppercase = true;
+  }
 }
 
 var passwordCreator = function(pconf) {
