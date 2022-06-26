@@ -1,11 +1,14 @@
 // Assignment code here
 
-// GLOBAL SCOPE
+// ## GLOBAL SCOPE ##
+
+// soup of characters
+var characterSoup = "";
 
 // character sets
 var charBase = {
-  lowercase: "abcdefghiklmnopqrstuvwxyz",  
   uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXTZ",  
+  lowercase: "abcdefghiklmnopqrstuvwxyz",  
   numeric: "1234567890",
   special: "#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
 }
@@ -27,7 +30,8 @@ var passConf = {
   }
 }
 
-// PASSWORD CRITERIA:
+
+// ## PASSWORD CRITERIA ##
 
 // password length
 var passwordLength = function() {
@@ -107,47 +111,99 @@ var spclChar = function() {
   }
 }
 
-// Create tha character base soap 
-var stringBase = function(pConfig) {
-  var baseStg = "";
-  if (pConfig.lowercase) {
-    baseStg += charBase.lowercase;
+// Create tha character base soup 
+var createCharSoup = function() {
+  if (passConf.lowercase) {
+    characterSoup += charBase.lowercase;
   }
-  if (pConfig.uppercase) {
-    baseStg += charBase.uppercase;
+  if (passConf.uppercase) {
+    characterSoup += charBase.uppercase;
   }
-  if (pConfig.numeric) {
-    baseStg += charBase.numeric;
+  if (passConf.numeric) {
+    characterSoup += charBase.numeric;
   }
-  if (pConfig.special) {
-    baseStg += charBase.special;
+  if (passConf.special) {
+    characterSoup += charBase.special;
   }
-  console.log('base: ' + baseStg);
-  return baseStg;
+
+}
+// check if passwprd meet with the criteria
+var passwordCheck = function (newPass) {
+  var passwordPassed = false;
+
+  // Check using criteria regex
+  var lowerRegex = /(.*[a-z].*)/;
+  var isLower = lowerRegex.test(newPass);
+  var upperRegex = /(.*[A-Z].*)/;
+  var isUpper = upperRegex.test(newPass);
+  var numRegex = /(.*\d.*)/;
+  var isNumeric = numRegex.test(newPass);
+  var specialRegex =/(.*\W.*)/;
+  var isSpecial = specialRegex.test(newPass);
+
+  while (
+    passConf.lowercase != isLower ||
+    passConf.uppercase != isUpper ||
+    passConf.numeric != isNumeric ||
+    passConf.special != isSpecial 
+    ){
+      // console.log("passConf");
+      // console.log(passConf.lowercase);
+      // console.log(passConf.lowercase);
+      // console.log(passConf.lowercase);
+      // console.log(passConf.lowercase);
+      // console.log("newPass");
+      // console.log(isLower);
+      // console.log(isUpper);
+      // console.log(isNumeric);
+      // console.log(isSpecial);
+      
+      if (
+        passConf.lowercase === isLower &&
+        passConf.uppercase === isUpper &&
+        passConf.numeric === isNumeric &&
+        passConf.special === isSpecial
+        ){
+          console.log("password passed " + true);
+          break;
+        }
+      passwordCreator();
+      console.log("password passed " + false);
+    }
+    return true;
 
 }
 
-var passwordCreator = function(pConfig) {
-  var rString = ''; 
-  for (var i = 0; i < pConfig.length; i++) {  
-    var randomRes = Math.floor(Math.random() * charBase.lowercase.length);  
-    rString += charBase.lowercase.substring(randomRes, randomRes + 1);  
+var passwordCreator = function() {
+  var newPass = ''; 
+  for (var i = 0; i < passConf.length; i++) {  
+    var randomNum = Math.floor(Math.random() * characterSoup.length);  
+    newPass += characterSoup.substring(randomNum, randomNum + 1);  
   }  
-  return rString;
+  console.log('newPass' , newPass);
+  if (passwordCheck(newPass)){
+    console.log("newPass passed", newPass);
+    return newPass;
+  }
 }
 
-var generatePassword = function() {
+function generatePassword() {
   console.log("start");
   passwordLength();
   caseType();
   numChar();
   spclChar();
-  var sbase = stringBase(passConf)
+  createCharSoup();
+  var password = passwordCreator();
+
+  // reset vaules
+  passConf.reset();
+  characterSoup = ""
 
   console.log(passConf);
-  console.log(sbase);
-
-  return passwordCreator(passConf);
+  console.log(characterSoup);
+  console.log(password);
+  return password;
 }
 
 // Get references to the #generate element
