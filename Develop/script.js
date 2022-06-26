@@ -149,6 +149,7 @@ function generatePassword() {
 
 // ### INTERFACE ### 
 
+// * The interface, HTML and CSS was written by UM Coding Boot Camp. (https://bootcamp.miami.edu) *
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
