@@ -1,14 +1,11 @@
 // ### GLOBAL SCOPE ###
 
-// defining soup of characters var
-var characterSoup = "";
-
 // character sets
 var charBase = {
   uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXTZ",  
   lowercase: "abcdefghiklmnopqrstuvwxyz",  
   numeric: "1234567890",
-  special: "#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
+  special: "#$%&'()*+,-./:;<=>?@[\]^_{|}~"
 }
 
 // password configuration object
@@ -28,18 +25,18 @@ var passConf = {
 }
 
 
-// ### CRITERIA PROPMTS ###
+// ### CRITERIA PROMPTS ###
 
 // password length prompt
 var passwordLength = function() {
   var pwLength = '';
-  while (pwLength > 128 || pwLength < 8 || isNaN(pwLength) ) {
-    pwLength = window.prompt("Please enter the length your password. Min. 8, Max. 128 characters."); 
+  while (pwLength > 128 || pwLength < 8 || isNaN(pwLength)) {
+    pwLength = window.prompt("Enter the length of your password. Min. 8, Max. 128 characters."); 
     pwLength = parseInt(pwLength);
     if (pwLength < 129 && pwLength > 7) {            
       break;
     }else{
-      window.alert("Must be a number between 8 and 128");
+      window.alert("Must be a number between 8 and 128.");
     }
   }
   passConf.length = pwLength;
@@ -48,12 +45,12 @@ var passwordLength = function() {
 // password case type prompt
 var caseType = function() {
   while (pwCase > 3 || pwCase < 1 || isNaN(pwCase)) {
-    var pwCase = window.prompt("What type of letters do you want to your password? Please enter: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
+    var pwCase = window.prompt("Enter the type of characters: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
     pwCase = parseInt(pwCase);
     if (pwCase < 4 && pwCase > 0) {            
       break;
     }else{
-      window.alert("Must be a number between 1 and 3 (1 = Lowercase, 2 = Uppercase, 3 = Both).");
+      window.alert("Must be a number between 1 and 3.");
     }
   }
 
@@ -74,12 +71,12 @@ var caseType = function() {
 // password numeric characters prompt
 var numChar = function() {
   while (pwNumeric > 2 || pwNumeric < 1 || isNaN(pwNumeric)) {
-    var pwNumeric = window.prompt("Do you want numeric characters in your password? Please enter: 1 = Yes, 2 = No."); 
+    var pwNumeric = window.prompt("Do you want numeric characters? 1 = Yes, 2 = No."); 
     pwNumeric = parseInt(pwNumeric);
     if (pwNumeric < 3 && pwNumeric > 0) {            
       break;
     }else{
-      window.alert("Must be number 1 or 2 (1 = Yes, 2 = No).");
+      window.alert("Must be a number, 1 or 2.");
     }
   }
 
@@ -94,12 +91,12 @@ var numChar = function() {
 // password special characters prompt
 var spclChar = function() {
   while (pwSpecial > 2 || pwSpecial < 1 || isNaN(pwSpecial)) {
-    var pwSpecial = window.prompt("Do you want special characters in your password? Please enter: 1 = Yes, 2 = No"); 
+    var pwSpecial = window.prompt("Do you want special characters? 1 = Yes, 2 = No."); 
     pwSpecial = parseInt(pwSpecial);
     if (pwSpecial < 3 && pwSpecial > 0) {            
       break;
     }else{
-      window.alert("Must be enter 1 or 2 (1 = Yes, 2 = No).");
+      window.alert("Must be a number, 1 or 2.");
     }
   }
 
@@ -113,67 +110,26 @@ var spclChar = function() {
 
 // ### PASSWORD GENERATOR ###
 
-// Create character base soup 
-var createCharSoup = function() {
-  if (passConf.lowercase) {
-    characterSoup += charBase.lowercase;
-  }
-  if (passConf.uppercase) {
-    characterSoup += charBase.uppercase;
-  }
-  if (passConf.numeric) {
-    characterSoup += charBase.numeric;
-  }
-  if (passConf.special) {
-    characterSoup += charBase.special;
-  }
-}
-
-// check if passwprd meet the criteria
-var passwordCheck = function (newPass) {
-  var passwordPassed = false;
-
-  // Check using criteria regex
-  var lowerRegex = /(.*[a-z].*)/;
-  var isLower = lowerRegex.test(newPass);
-  var upperRegex = /(.*[A-Z].*)/;
-  var isUpper = upperRegex.test(newPass);
-  var numRegex = /(.*\d.*)/;
-  var isNumeric = numRegex.test(newPass);
-  var specialRegex =/(.*\W.*)/;
-  var isSpecial = specialRegex.test(newPass);
-
-  while (
-    passConf.lowercase != isLower ||
-    passConf.uppercase != isUpper ||
-    passConf.numeric != isNumeric ||
-    passConf.special != isSpecial 
-    ){      
-      if (
-        passConf.lowercase === isLower &&
-        passConf.uppercase === isUpper &&
-        passConf.numeric === isNumeric &&
-        passConf.special === isSpecial
-        ){
-          break;
-        }
-      passwordCreator();
-    }
-    return true;
-}
-
 // create password from character soup
 var passwordCreator = function() {
   var newPass = ''; 
-  // take ramdomly characters from the soup
-  for (var i = 0; i < passConf.length; i++) {  
-    var randomNum = Math.floor(Math.random() * characterSoup.length);  
-    newPass += characterSoup.substring(randomNum, randomNum + 1);  
-  }  
-  // check if password meet criteria
-  if (passwordCheck(newPass)){
-    return newPass;
+  // iterate over the passConf object and extract from charBase on demand
+  while(passConf.length != newPass.length) {
+    for(var i in passConf){
+      if (passConf[i] == true){
+        var keyType = i;
+        var randomNum = Math.floor(Math.random() * charBase[keyType].length);  
+        newPass += charBase[keyType].substring(randomNum, randomNum + 1);  
+        if (passConf.length == newPass.length){
+          break;
+        }
+      }
+    }
   }
+
+  // Shuffle newPass
+  newPass = newPass.split('').sort(function(){return 0.5-Math.random()}).join('');
+  return newPass;
 }
 
 // main function
@@ -182,7 +138,6 @@ function generatePassword() {
   caseType();
   numChar();
   spclChar();
-  createCharSoup();
   var password = passwordCreator();
 
   // reset vaules
