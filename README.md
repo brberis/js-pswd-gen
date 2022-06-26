@@ -15,7 +15,7 @@ Create password with combinations of lowercase, uppercase, numbers and/or specia
 
 ## Getting Started
 
-![alt text](https://brberis.github.io/js-pswd-gen/Develop/web.png)
+![alt text](https://github.com/brberis/js-pswd-gen/blob/main/Develop/web.png)
 
 <br/>
 
