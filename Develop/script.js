@@ -1,8 +1,6 @@
-// Assignment code here
+// ### GLOBAL SCOPE ###
 
-// ## GLOBAL SCOPE ##
-
-// soup of characters
+// defining soup of characters var
 var characterSoup = "";
 
 // character sets
@@ -12,7 +10,6 @@ var charBase = {
   numeric: "1234567890",
   special: "#$%&'()*+,-./:;<=>?@[\]^_`{|}~"
 }
-
 
 // password configuration object
 var passConf = {
@@ -31,9 +28,9 @@ var passConf = {
 }
 
 
-// ## PASSWORD CRITERIA ##
+// ### CRITERIA PROPMTS ###
 
-// password length
+// password length prompt
 var passwordLength = function() {
   var pwLength = '';
   while (pwLength > 128 || pwLength < 8 || isNaN(pwLength) ) {
@@ -48,9 +45,8 @@ var passwordLength = function() {
   passConf.length = pwLength;
 }
 
-// password case type
+// password case type prompt
 var caseType = function() {
- 
   while (pwCase > 3 || pwCase < 1 || isNaN(pwCase)) {
     var pwCase = window.prompt("What type of letters do you want to your password? Please enter: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
     pwCase = parseInt(pwCase);
@@ -64,17 +60,19 @@ var caseType = function() {
   switch(pwCase) {
     case 1:
       passConf.lowercase = true;
+      break;
     case 2:
       passConf.uppercase = true;
+      break;
     case 3:
       passConf.lowercase = true;
       passConf.uppercase = true;
+      break;
   }
 }
 
-// password numeric characters
+// password numeric characters prompt
 var numChar = function() {
-
   while (pwNumeric > 2 || pwNumeric < 1 || isNaN(pwNumeric)) {
     var pwNumeric = window.prompt("Do you want numeric characters in your password? Please enter: 1 = Yes, 2 = No."); 
     pwNumeric = parseInt(pwNumeric);
@@ -88,13 +86,13 @@ var numChar = function() {
   switch(pwNumeric) {
     case 1:
       passConf.numeric = true;
+      break;
   }
 }
 
 
-// password special characters
+// password special characters prompt
 var spclChar = function() {
- 
   while (pwSpecial > 2 || pwSpecial < 1 || isNaN(pwSpecial)) {
     var pwSpecial = window.prompt("Do you want special characters in your password? Please enter: 1 = Yes, 2 = No"); 
     pwSpecial = parseInt(pwSpecial);
@@ -108,10 +106,14 @@ var spclChar = function() {
   switch(pwSpecial) {
     case 1:
       passConf.special = true;
+      break;
   }
 }
 
-// Create tha character base soup 
+
+// ### PASSWORD GENERATOR ###
+
+// Create character base soup 
 var createCharSoup = function() {
   if (passConf.lowercase) {
     characterSoup += charBase.lowercase;
@@ -125,9 +127,9 @@ var createCharSoup = function() {
   if (passConf.special) {
     characterSoup += charBase.special;
   }
-
 }
-// check if passwprd meet with the criteria
+
+// check if passwprd meet the criteria
 var passwordCheck = function (newPass) {
   var passwordPassed = false;
 
@@ -146,49 +148,36 @@ var passwordCheck = function (newPass) {
     passConf.uppercase != isUpper ||
     passConf.numeric != isNumeric ||
     passConf.special != isSpecial 
-    ){
-      // console.log("passConf");
-      // console.log(passConf.lowercase);
-      // console.log(passConf.lowercase);
-      // console.log(passConf.lowercase);
-      // console.log(passConf.lowercase);
-      // console.log("newPass");
-      // console.log(isLower);
-      // console.log(isUpper);
-      // console.log(isNumeric);
-      // console.log(isSpecial);
-      
+    ){      
       if (
         passConf.lowercase === isLower &&
         passConf.uppercase === isUpper &&
         passConf.numeric === isNumeric &&
         passConf.special === isSpecial
         ){
-          console.log("password passed " + true);
           break;
         }
       passwordCreator();
-      console.log("password passed " + false);
     }
     return true;
-
 }
 
+// create password from character soup
 var passwordCreator = function() {
   var newPass = ''; 
+  // take ramdomly characters from the soup
   for (var i = 0; i < passConf.length; i++) {  
     var randomNum = Math.floor(Math.random() * characterSoup.length);  
     newPass += characterSoup.substring(randomNum, randomNum + 1);  
   }  
-  console.log('newPass' , newPass);
+  // check if password meet criteria
   if (passwordCheck(newPass)){
-    console.log("newPass passed", newPass);
     return newPass;
   }
 }
 
+// main function
 function generatePassword() {
-  console.log("start");
   passwordLength();
   caseType();
   numChar();
@@ -200,11 +189,10 @@ function generatePassword() {
   passConf.reset();
   characterSoup = ""
 
-  console.log(passConf);
-  console.log(characterSoup);
-  console.log(password);
   return password;
 }
+
+// ### INTERFACE ### 
 
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
