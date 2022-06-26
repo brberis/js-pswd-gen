@@ -1,11 +1,17 @@
-// ### GLOBAL SCOPE ###
-
 // character sets
 var charBase = {
   uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXTZ",  
   lowercase: "abcdefghiklmnopqrstuvwxyz",  
   numeric: "1234567890",
   special: "#$%&'()*+,-./:;<=>?@[\]^_{|}~"
+}
+
+var userMessages = {
+  passwordLength: "Enter the length of your password. Min. 8, Max. 128 characters.",
+  passwordLetters: "Do you want to include letters in your password?",
+  passwordCaseType: "Enter the type of characters: 1 = Lowercase, 2 = Uppercase, 3 = Both.",
+  passwordNumeric: "Do you want numeric characters? 1 = Yes, 2 = No.",
+  passwordSpecial: "Do you want special characters? 1 = Yes, 2 = No.",
 }
 
 // password configuration object
@@ -24,91 +30,23 @@ var passConf = {
   }
 }
 
-
-// ### CRITERIA PROMPTS ###
-
-// password length prompt
-var passwordLength = function() {
-  var pwLength = '';
-  while (pwLength > 128 || pwLength < 8 || isNaN(pwLength)) {
-    pwLength = window.prompt("Enter the length of your password. Min. 8, Max. 128 characters."); 
-    pwLength = parseInt(pwLength);
-    if (pwLength < 129 && pwLength > 7) {            
+// user prompts
+var numPrompt = function(min, max, message) {
+  while (response > max || response < min || isNaN(response)) {
+    var response = window.prompt(message); 
+    response = parseInt(response);
+    if (response < max + 1 && response > min - 1) {            
       break;
     }else{
-      window.alert("Must be a number between 8 and 128.");
+      if ((max - min) === 1) {
+        window.alert("Must be a number, " + min + " or " +  max + ".");
+      }else{
+        window.alert("Must be a number between " + min + " and " + max);
+      }
     }
   }
-  passConf.length = pwLength;
+  return response;
 }
-
-// password case type prompt
-var caseType = function() {
-  while (pwCase > 3 || pwCase < 1 || isNaN(pwCase)) {
-    var pwCase = window.prompt("Enter the type of characters: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
-    pwCase = parseInt(pwCase);
-    if (pwCase < 4 && pwCase > 0) {            
-      break;
-    }else{
-      window.alert("Must be a number between 1 and 3.");
-    }
-  }
-
-  switch(pwCase) {
-    case 1:
-      passConf.lowercase = true;
-      break;
-    case 2:
-      passConf.uppercase = true;
-      break;
-    case 3:
-      passConf.lowercase = true;
-      passConf.uppercase = true;
-      break;
-  }
-}
-
-// password numeric characters prompt
-var numChar = function() {
-  while (pwNumeric > 2 || pwNumeric < 1 || isNaN(pwNumeric)) {
-    var pwNumeric = window.prompt("Do you want numeric characters? 1 = Yes, 2 = No."); 
-    pwNumeric = parseInt(pwNumeric);
-    if (pwNumeric < 3 && pwNumeric > 0) {            
-      break;
-    }else{
-      window.alert("Must be a number, 1 or 2.");
-    }
-  }
-
-  switch(pwNumeric) {
-    case 1:
-      passConf.numeric = true;
-      break;
-  }
-}
-
-
-// password special characters prompt
-var spclChar = function() {
-  while (pwSpecial > 2 || pwSpecial < 1 || isNaN(pwSpecial)) {
-    var pwSpecial = window.prompt("Do you want special characters? 1 = Yes, 2 = No."); 
-    pwSpecial = parseInt(pwSpecial);
-    if (pwSpecial < 3 && pwSpecial > 0) {            
-      break;
-    }else{
-      window.alert("Must be a number, 1 or 2.");
-    }
-  }
-
-  switch(pwSpecial) {
-    case 1:
-      passConf.special = true;
-      break;
-  }
-}
-
-
-// ### PASSWORD GENERATOR ###
 
 // create password from character soup
 var passwordCreator = function() {
@@ -134,10 +72,41 @@ var passwordCreator = function() {
 
 // main function
 function generatePassword() {
-  passwordLength();
-  caseType();
-  numChar();
-  spclChar();
+  // prompt password legth
+  passConf.length = numPrompt(8, 128, userMessages.passwordLength);
+  
+  // password case type prompt
+  var pwType = numPrompt(1, 3, userMessages.passwordCaseType);
+    switch(pwType) {
+      case 1:
+        passConf.lowercase = true;
+        break;
+      case 2:
+        passConf.uppercase = true;
+        break;
+      case 3:
+        passConf.lowercase = true;
+        passConf.uppercase = true;
+        break;
+    }
+
+  // password numeric prompt
+  var pwNumeric = numPrompt(1, 2, userMessages.passwordNumeric);
+    switch(pwNumeric) {
+      case 1:
+        passConf.numeric = true;
+        break;
+    }
+
+  // password special char prompt
+  var pwSpecial = numPrompt(1, 2, userMessages.passwordSpecial);
+    switch(pwSpecial) {
+      case 1:
+        passConf.special = true;
+        break;
+    }
+  
+  // create password
   var password = passwordCreator();
 
   // reset vaules
