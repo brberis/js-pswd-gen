@@ -17,13 +17,13 @@ var passConf = {
   lowercase: false, 
   uppercase: false, 
   numeric: false, 
-  specialChar: 0, // 0 = no, 1 = yes, 2 = random selection
+  special: false,
   reset: function() {
     this.length = null;
     this.lowercase = false;
     this.uppercase = false;
     this.numeric = false;
-    this.specialChar = 0; 
+    this.special = false; 
   }
 }
 
@@ -33,12 +33,12 @@ var passConf = {
 var passwordLength = function() {
   var pwLength = '';
   while (pwLength > 128 || pwLength < 8 || isNaN(pwLength) ) {
-    pwLength = window.prompt("Please enter the number of characters of your password. Between 8 and 128 characters."); 
+    pwLength = window.prompt("Please enter the length your password. Min. 8, Max. 128 characters."); 
     pwLength = parseInt(pwLength);
-    if (pwLength < 128 || pwLength > 8) {            
+    if (pwLength < 129 && pwLength > 7) {            
       break;
     }else{
-      window.alert("Must be a number between 8 ane 128");
+      window.alert("Must be a number between 8 and 128");
     }
   }
   passConf.length = pwLength;
@@ -48,9 +48,9 @@ var passwordLength = function() {
 var caseType = function() {
  
   while (pwCase > 3 || pwCase < 1 || isNaN(pwCase)) {
-    var pwCase = window.prompt("Please select: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
+    var pwCase = window.prompt("What type of letters do you want to your password? Please enter: 1 = Lowercase, 2 = Uppercase, 3 = Both."); 
     pwCase = parseInt(pwCase);
-    if (pwCase < 3 || pwCase > 1) {            
+    if (pwCase < 4 && pwCase > 0) {            
       break;
     }else{
       window.alert("Must be a number between 1 and 3 (1 = Lowercase, 2 = Uppercase, 3 = Both).");
@@ -68,46 +68,62 @@ var caseType = function() {
   }
 }
 
-// password special characters
-var spclChar = function() {
- 
-  while (pwSpecial > 3 || pwSpecial < 1 || isNaN(pwSpecial)) {
-    var pwSpecial = window.prompt("Do you want special characters in your password? Please select: 1 = Yes, 2 = No, 3 = Random selection."); 
-    pwSpecial = parseInt(pwSpecial);
-    if (pwSpecial < 3 || pwSpecial > 1) {            
+// password numeric characters
+var numChar = function() {
+
+  while (pwNumeric > 2 || pwNumeric < 1 || isNaN(pwNumeric)) {
+    var pwNumeric = window.prompt("Do you want numeric characters in your password? Please enter: 1 = Yes, 2 = No."); 
+    pwNumeric = parseInt(pwNumeric);
+    if (pwNumeric < 3 && pwNumeric > 0) {            
       break;
     }else{
-      window.alert("Must be a number between 1 and 3 (1 = Lowercase, 2 = Uppercase, 3 = Both).");
+      window.alert("Must be number 1 or 2 (1 = Yes, 2 = No).");
     }
   }
 
-  switch(parseInt(pwSpecial)) {
+  switch(pwNumeric) {
     case 1:
-      passConf.specialChar = 1;
-    case 2:
-      passConf.specialChar = 0;
-    case 3:
-      passConf.specialChar = 2;
+      passConf.numeric = true;
+  }
+}
+
+
+// password special characters
+var spclChar = function() {
+ 
+  while (pwSpecial > 2 || pwSpecial < 1 || isNaN(pwSpecial)) {
+    var pwSpecial = window.prompt("Do you want special characters in your password? Please enter: 1 = Yes, 2 = No"); 
+    pwSpecial = parseInt(pwSpecial);
+    if (pwSpecial < 3 && pwSpecial > 0) {            
+      break;
+    }else{
+      window.alert("Must be enter 1 or 2 (1 = Yes, 2 = No).");
+    }
+  }
+
+  switch(pwSpecial) {
+    case 1:
+      passConf.special = true;
   }
 }
 
 // Create tha character base soap 
 var stringBase = function(pConfig) {
-  debugger;
-  var base = "";
+  var baseStg = "";
   if (pConfig.lowercase) {
-    base =+ charBase.lowercase;
-
-  } else if (pConfig.uppercase) {
-    base =+ charBase.uppercase;
-
-  } else if (pConfig.numeric) {
-    base =+ charBase.numeric;
-
-  } else if (pConfig.specialChar > 0) {
-    base =+ charBase.special;
+    baseStg += charBase.lowercase;
   }
-  console.log('base: ' + base);
+  if (pConfig.uppercase) {
+    baseStg += charBase.uppercase;
+  }
+  if (pConfig.numeric) {
+    baseStg += charBase.numeric;
+  }
+  if (pConfig.special) {
+    baseStg += charBase.special;
+  }
+  console.log('base: ' + baseStg);
+  return baseStg;
 
 }
 
@@ -124,6 +140,7 @@ var generatePassword = function() {
   console.log("start");
   passwordLength();
   caseType();
+  numChar();
   spclChar();
   var sbase = stringBase(passConf)
 
