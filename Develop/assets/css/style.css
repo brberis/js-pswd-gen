@@ -1,3 +1,4 @@
+/* inizialization */
 *,
 *::before,
 *::after {
@@ -23,6 +24,7 @@ body {
   padding-right: 20px;
 }
 
+/* main start */
 header {
   text-align: center;
   padding: 20px;
@@ -117,7 +119,9 @@ button[disabled] {
   resize: none;
   overflow: hidden;
 }
+/* main end */
 
+/* media queries  */
 @media (max-width: 690px) {
   .btn {
     font-size: 1rem;
