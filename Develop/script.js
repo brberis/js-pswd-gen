@@ -1,3 +1,8 @@
+/**
+* @author  Cristobal A Barberis
+* @version 0.1, 06/06/22
+*/
+
 // character sets
 var charBase = {
   uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXTZ",  
@@ -8,10 +13,11 @@ var charBase = {
 
 var userMessages = {
   passwordLength: "Enter the length of your password. Min. 8, Max. 128 characters.",
-  passwordLetters: "Do you want to include letters in your password?",
+  passwordLetters: "Do you want to include letters in your password? 1 = Yes, 2 = No.",
   passwordCaseType: "Enter the type of characters: 1 = Lowercase, 2 = Uppercase, 3 = Both.",
   passwordNumeric: "Do you want numeric characters? 1 = Yes, 2 = No.",
   passwordSpecial: "Do you want special characters? 1 = Yes, 2 = No.",
+  passwordNoSelect: "Please select at least one of the previews type of characters."
 }
 
 // password configuration object
@@ -74,51 +80,69 @@ var passwordCreator = function() {
 function generatePassword() {
   // prompt password legth
   passConf.length = numPrompt(8, 128, userMessages.passwordLength);
-  
-  // password case type prompt
-  var pwType = numPrompt(1, 3, userMessages.passwordCaseType);
-    switch(pwType) {
-      case 1:
-        passConf.lowercase = true;
-        break;
-      case 2:
-        passConf.uppercase = true;
-        break;
-      case 3:
-        passConf.lowercase = true;
-        passConf.uppercase = true;
-        break;
+
+  // password options
+  var optionSelect = 0;
+  while (optionSelect === 0){
+    // password letters and case type prompt
+    var pwLetters = numPrompt(1, 3, userMessages.passwordLetters);
+    if (pwLetters === 1){
+      var pwType = numPrompt(1, 3, userMessages.passwordCaseType);
+      switch(pwType) {
+        case 1:
+          passConf.lowercase = true;
+          break;
+        case 2:
+          passConf.uppercase = true;
+          break;
+        case 3:
+          passConf.lowercase = true;
+          passConf.uppercase = true;
+          break;
+      }
     }
 
-  // password numeric prompt
-  var pwNumeric = numPrompt(1, 2, userMessages.passwordNumeric);
-    switch(pwNumeric) {
-      case 1:
-        passConf.numeric = true;
-        break;
+    // password numeric prompt
+    var pwNumeric = numPrompt(1, 2, userMessages.passwordNumeric);
+      switch(pwNumeric) {
+        case 1:
+          passConf.numeric = true;
+          break;
+      }
+
+    // password special char prompt
+    var pwSpecial = numPrompt(1, 2, userMessages.passwordSpecial);
+      switch(pwSpecial) {
+        case 1:
+          passConf.special = true;
+          break;
+      }
+
+    // if there is no selection
+    for(var i in passConf){
+      if (passConf[i] == true){
+        optionSelect++;
+      }
+    }
+    if (optionSelect === 0){
+      window.alert(userMessages.passwordNoSelect);
+    }else{
+      break;
     }
 
-  // password special char prompt
-  var pwSpecial = numPrompt(1, 2, userMessages.passwordSpecial);
-    switch(pwSpecial) {
-      case 1:
-        passConf.special = true;
-        break;
-    }
-  
+  }
   // create password
   var password = passwordCreator();
 
   // reset vaules
   passConf.reset();
-  characterSoup = ""
 
   return password;
 }
 
 // ### INTERFACE ### 
 
-// * The interface, HTML and CSS was written by UM Coding Boot Camp. (https://bootcamp.miami.edu) *
+// **** The interface, HTML and CSS was written by UM Coding Boot Camp. (https://bootcamp.miami.edu) ****
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
