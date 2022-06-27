@@ -35,6 +35,7 @@ Create password with combinations of lowercase, uppercase, numbers and/or specia
 Contributors names:
 
 Cristobal A Barberis  
+UM Coding Boot Camp team, (HTML and CSS).
 
 
 ## Version History
