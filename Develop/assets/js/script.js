@@ -85,7 +85,7 @@ function generatePassword() {
   var optionSelect = 0;
   while (optionSelect === 0){
     // password letters and case type prompt
-    var pwLetters = numPrompt(1, 3, userMessages.passwordLetters);
+    var pwLetters = numPrompt(1, 2, userMessages.passwordLetters);
     if (pwLetters === 1){
       var pwType = numPrompt(1, 3, userMessages.passwordCaseType);
       switch(pwType) {
