@@ -104,19 +104,19 @@ function generatePassword() {
 
     // password numeric prompt
     var pwNumeric = numPrompt(1, 2, userMessages.passwordNumeric);
-      switch(pwNumeric) {
-        case 1:
-          passConf.numeric = true;
-          break;
-      }
+    switch(pwNumeric) {
+      case 1:
+        passConf.numeric = true;
+        break;
+    }
 
     // password special char prompt
     var pwSpecial = numPrompt(1, 2, userMessages.passwordSpecial);
-      switch(pwSpecial) {
-        case 1:
-          passConf.special = true;
-          break;
-      }
+    switch(pwSpecial) {
+      case 1:
+        passConf.special = true;
+        break;
+    }
 
     // if there is no selection
     for(var i in passConf){
